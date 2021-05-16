@@ -93,15 +93,16 @@ public class FichaDAO {
     }
     
     
-    public List listarID(String id){
+    public FichaEjemplar listarID(String id){
         List<FichaEjemplar>lista = new ArrayList<>();
         String sql="select * from fichaEjemplar where id="+id;
+        FichaEjemplar ficha=new FichaEjemplar();
         try {
             con=c.conectar();
             ps=con.prepareStatement(sql);
             rs=ps.executeQuery();
             while (rs.next()) {                
-                FichaEjemplar ficha=new FichaEjemplar();
+                ficha=new FichaEjemplar();
                 ficha.setId_Ejemplar(Integer.parseInt(rs.getString(1)));
                 ficha.setNombre(rs.getString(2));
                 ficha.setFilum(rs.getString(3));
@@ -123,7 +124,7 @@ public class FichaDAO {
             }
         } catch (Exception e) {
         }
-        return lista;
+        return ficha;
     } 
     
     

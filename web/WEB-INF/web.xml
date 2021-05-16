@@ -4,9 +4,17 @@
         <servlet-name>ControladorFicha</servlet-name>
         <servlet-class>control.ControladorFicha</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ControllAutor</servlet-name>
+        <servlet-class>control.ControllAutor</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ControladorFicha</servlet-name>
         <url-pattern>/ControladorFicha</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControllAutor</servlet-name>
+        <url-pattern>/ControllAutor</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

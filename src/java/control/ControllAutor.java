@@ -1,28 +1,26 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package control;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modelo.AdminDAO;
-import modelo.Administrador;
+import modelo.Autor;
+import modelo.AutorDAO;
+
 
 /**
  *
- * @author 57320
+ * @author Duvan Felipe
  */
-public class ControladorAdmin extends HttpServlet {
-    AdminDAO dao=new AdminDAO();
-    Administrador admin=new Administrador();
+public class ControllAutor extends HttpServlet {
+    AutorDAO dao=new AutorDAO();
+    Autor autor=new Autor();
+    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -34,15 +32,19 @@ public class ControladorAdmin extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String accion=request.getParameter("accion");
-            switch (accion){
-                case "Principal":
-                    request.getRequestDispatcher("Principal.jsp").forward(request, response);
-                    break;
-                default:
-                    throw new AssertionError();
-                    
-            }
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet ControllAutor</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet ControllAutor at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -71,62 +73,60 @@ public class ControladorAdmin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         String accion=request.getParameter("accion");
         switch(accion){
             case "Listar":
-                List<Administrador>datos=dao.listar();
+                List<Autor>datos=dao.listar();
                 request.setAttribute("datos", datos);
-                request.getRequestDispatcher("Admin.jsp").forward(request, response);
+                request.getRequestDispatcher("Autor.jsp").forward(request, response);
                 break;
             case "Nuevo":
-                request.getRequestDispatcher("addAdmin.jsp").forward(request, response);
+                request.getRequestDispatcher("addAutor.jsp").forward(request, response);
                 break;
             case "Guardar":
                 String id=request.getParameter("txtid");
                 String nombre=request.getParameter("txtnombre");
-                String apellido=request.getParameter("txtapellido");
-                String correo=request.getParameter("txtcorreo");
-                String contraseña=request.getParameter("txtcontra");
-                String clave=request.getParameter("txtclave");
-                admin.setId(id);
-                admin.setNombre(nombre);
-                admin.setApellido(apellido);
-                admin.setEmail(correo);
-                admin.setContraseña(contraseña);
-                admin.setClave(clave);
-                dao.agregar(admin);
+                String cargo=request.getParameter("txtcargo");
+                
+                autor.setId_autor(Integer.parseInt(id));
+                autor.setNombre(nombre);
+                autor.setCargo(cargo);
+                
+                
+                dao.agregar(autor);
                 request.getRequestDispatcher("ControladorAdmin?accion=Listar").forward(request, response);
                 break;
             case "Editar":
-                String idAdmin=request.getParameter("id");
-                Administrador admine=dao.listarId(idAdmin);
-                request.setAttribute("administrador", admine);
-                request.getRequestDispatcher("editAdmin.jsp").forward(request, response);
+                
+                String idAutor=request.getParameter("id");
+                Autor autor=dao.listarId(idAutor);
+                request.setAttribute("autor", autor);
+                request.getRequestDispatcher("editAutor.jsp").forward(request, response);
                 break;
             case "Actualizar":
-                String acid=request.getParameter("txtid");
-                String acNombre=request.getParameter("txtnombre");
-                String acApellido=request.getParameter("txtapellido");
-                String acCorreo=request.getParameter("txtcorreo");
-                String acContra=request.getParameter("txtcontra");
-                admin.setId(acid);
-                admin.setNombre(acNombre);
-                admin.setApellido(acApellido);
-                admin.setEmail(acCorreo);
-                admin.setContraseña(acContra);
-                dao.actualizar(admin);
+                String id1=request.getParameter("txtid");
+                String nombre1=request.getParameter("txtnombre");
+                String cargo1=request.getParameter("txtcargo");
+               
+                Autor aux = new Autor(Integer.parseInt(id1),nombre1,cargo1);
+                
+                
+                dao.actualizar(aux);
                 request.getRequestDispatcher("Controlador?accion=Listar").forward(request, response);
                 break;
             case "Borrar":
                 String id2=request.getParameter("id");
                 dao.delete(id2);
-                request.getRequestDispatcher("Controlador?accion=Listar").forward(request, response);
+                request.getRequestDispatcher("ControladorAdmin?accion=Listar").forward(request, response);
                 break;
             default:
                 throw new AssertionError();
         }
-        processRequest(request, response);
         
+         
+
+        processRequest(request, response);
     }
 
     /**

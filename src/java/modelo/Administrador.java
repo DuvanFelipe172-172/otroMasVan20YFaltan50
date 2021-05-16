@@ -6,6 +6,7 @@
 package modelo;
 
 import java.util.ArrayList;
+import modelo.Usuario;
 
 /**
  *
@@ -14,10 +15,13 @@ import java.util.ArrayList;
 public class Administrador extends Usuario{
     
     private ArrayList<Administrador> admins;
+    private String clave;
     
     public Administrador(){
         
     }
+    
+    
     
     public Administrador(String id, String nombre, String apellido, String email, String contraseña,String clave) {
         super(id, nombre, apellido, email, contraseña);
@@ -127,6 +131,14 @@ public class Administrador extends Usuario{
 
     public void setAdmins(ArrayList<Administrador> admins) {
         this.admins = admins;
+    }
+
+    public String getClave() {
+        return clave;
+    }
+
+    public void setClave(String clave) {
+        this.clave = clave;
     }
 
     

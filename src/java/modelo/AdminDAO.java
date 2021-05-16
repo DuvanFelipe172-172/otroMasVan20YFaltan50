@@ -8,8 +8,11 @@ package modelo;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import modelo.Administrador;
+import modelo.Conexion;
 
 /**
  *
@@ -22,6 +25,25 @@ public class AdminDAO {
     Conexion c=new Conexion();
     Connection con;
     
+    
+    public Administrador validar(String nombre,String contraseña){
+        Administrador admin=new  Administrador();
+        String sql="select * from adminsitrador where nombre=? and contraseña=?";
+        try {
+            con=c.conectar();
+            ps=con.prepareStatement(sql);
+            ps.setString(1,nombre);
+            ps.setString(2, contraseña);
+            rs=ps.executeQuery();
+            while (rs.next()) {                
+                admin.setId(rs.getString("id"));
+                admin.setNombre(rs.getString("nombre"));
+                admin.setContraseña(rs.getString("contraseña"));
+            }
+        } catch (SQLException e) {
+        }
+        return admin;
+    }
     
     public List listar(){
         List<Administrador>lista = new ArrayList<>();
@@ -39,7 +61,7 @@ public class AdminDAO {
                 admin.setContraseña(rs.getString(5));
                 lista.add(admin);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
         }
         return lista;
     }
@@ -49,20 +71,22 @@ public class AdminDAO {
         int r=0;
         String sql="insert into administrador(id,nombre,apellido,email,contraseña) values(?,?,?,?,?)";
         try {
-            con=c.conectar();
-            ps=con.prepareStatement(sql);
-            ps.setString(1,admin.getId());
-            ps.setString(2,admin.getNombre());
-            ps.setString(3,admin.getApellido());
-            ps.setString(4,admin.getEmail());
-            ps.setString(5,admin.getContraseña());
-            r=ps.executeUpdate();
-            if (r==1) {
-                r=1;
-            }else{
-                r=0;
+            if(admin.getClave().equals("xfC9p6Kf0n")){
+                con=c.conectar();
+                ps=con.prepareStatement(sql);
+                ps.setString(1,admin.getId());
+                ps.setString(2,admin.getNombre());
+                ps.setString(3,admin.getApellido());
+                ps.setString(4,admin.getEmail());
+                ps.setString(5,admin.getContraseña());
+                r=ps.executeUpdate();
+                if (r==1) {
+                    r=1;
+                }else{
+                    r=0;
+                }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
         }
         return r;
     }
@@ -82,7 +106,7 @@ public class AdminDAO {
                 admin.setEmail(rs.getString(4));
                 admin.setContraseña(rs.getString(5));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
         }
         return admin;
     }
@@ -103,7 +127,7 @@ public class AdminDAO {
             }else{
                 r=0;
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
         }
         return r;
     }
@@ -114,7 +138,7 @@ public class AdminDAO {
             con=c.conectar();
             ps=con.prepareStatement(sql);
             ps.executeUpdate();
-        } catch (Exception e) {
+        } catch (SQLException e) {
         }
     }
     
